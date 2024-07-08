@@ -5,6 +5,10 @@
     font-family: "PT Sans Narrow", sans-serif;
 }
 
+header {
+    margin: 1% 3% 1% 3%;
+}
+
 h1 {
     font-family: "Rubik Mono One", monospace;
 }
@@ -16,8 +20,36 @@ h1 {
 
 .task {
     width: 100%;
-    margin: 0 1% 0 1%;
+    margin: 0 3% 0 3%;
+    height: 80vh;
 }
 .taskManeger img {
     width: 80%;
+}
+
+.btn {
+    margin: .75em;
+}
+
+.btn svg {
+    pointer-events: none;
+}
+
+.list-group-item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.list-group-item-span {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+.form-control {
+    margin-top: 1em;
+}
+
+.doneNote-span {
+    text-decoration: line-through;
+    opacity: 0.5;
 }

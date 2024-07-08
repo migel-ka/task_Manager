@@ -1,27 +1,65 @@
-const Form = document.querySelector ('#form');
+//Переменные
 
-const TaskInput = document.querySelector ('#formGroupExampleInput2');
+const Form = document.querySelector ('#form'); //нахожу форму ввода
 
-const TaskIextInfo = document.querySelector ('#formGroupExampleInput2-info');
+const TaskInput = document.querySelector ('#formGroupExampleInput2'); // нахожу полле ввода задачи
 
-const TaskHtmlList = document.querySelector ('#taskManeger-task-info');
+const TaskIextInfo = document.querySelector ('#formGroupExampleInput2-info'); // нахожу полле ввода описания задачи
 
-Form.addEventListener('submit', function (event) {
-    event.preventDefault();
-    const TaskIext = TaskInput.value;
-    const TaskIextInfoHtml = TaskIextInfo.value;
+const TaskHtmlList = document.querySelector ('#taskManeger-task-info'); // нахожу список
+
+Form.addEventListener('submit', addTask); //addTask
+
+TaskHtmlList.addEventListener('click', deleteTask); //deleteTask
+
+TaskHtmlList.addEventListener('click', doneTask); //doneTask
+
+// Функция добавления задачи
+function addTask (event) {
+    event.preventDefault(); // запрещаю перезагрузку станицы
+    const TaskIext = TaskInput.value; // вытаскиваю значение задачи
+    const TaskIextInfoHtml = TaskIextInfo.value; // вытаскиваю значение описания задачи
     
-    const TaskHTML = `
-                    
-                        <li class="list-group-item">
-                             <b> ${TaskIext}</b>
-                            <p> ${TaskIextInfoHtml} </p>
-                        </li>
-                    `;
+    // добавляю код переменной
+    const TaskHTML = `  <li class="list-group-item"> 
+                            <div class="list-group-item-span">
+                               <b> ${TaskIext}</b>
+                               <p> ${TaskIextInfoHtml} </p>
+                            </div>
+                            <div class="task-item__buttons">
+                                <button type="button" class="btn btn-outline-success" data-action="done">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" data-action="delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </li>`;
 
-    TaskHtmlList.insertAdjacentHTML ('beforeend', TaskHTML);
+    TaskHtmlList.insertAdjacentHTML ('beforeend', TaskHTML);     // добавляю код в страницу HTML в конец
 
-    TaskInput.value = "";
-    TaskIextInfoHtml = TaskIextInfo.value = "";
-    TaskInput.focus();
-})
+    TaskInput.value = ""; // очищаю пооле ввода 1
+    TaskIextInfo.value = ""; // очищаю пооле ввода 2
+    TaskInput.focus(); //фокус на поле 1
+}
+
+// Функция удаления задачи
+function deleteTask (event) {
+    if (event.target.dataset.action === 'delete') {
+        const perentNote = event.target.closest ('.list-group-item');
+        perentNote.remove();
+    }
+}
+
+// Функция выполнения задачи
+function doneTask (event) {
+    if (event.target.dataset.action === 'done') {
+        const doneNote = event.target.closest ('.list-group-item');
+        const spanNote = doneNote.querySelector ('.list-group-item-span');
+        spanNote.classList.toggle('doneNote-span');
+    }
+}
