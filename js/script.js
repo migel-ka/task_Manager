@@ -8,6 +8,10 @@ const TaskIextInfo = document.querySelector ('#formGroupExampleInput2-info'); //
 
 const TaskHtmlList = document.querySelector ('#taskManeger-task-info'); // нахожу список
 
+const TaskStart = document.querySelector ('#task-start'); //элемент начала
+
+let taskMenedgerLS =[]; //создаю хранилище для задач
+
 Form.addEventListener('submit', addTask); //addTask
 
 TaskHtmlList.addEventListener('click', deleteTask); //deleteTask
@@ -20,11 +24,21 @@ function addTask (event) {
     const TaskIext = TaskInput.value; // вытаскиваю значение задачи
     const TaskIextInfoHtml = TaskIextInfo.value; // вытаскиваю значение описания задачи
     
+    const taskObjekt = {
+        id: Date.now(),
+        text: TaskIext,
+        textInfo: TaskIextInfoHtml,
+        done: false
+    }
+    taskMenedgerLS.push(taskObjekt);
+
+    const cssClassDone = taskMenedgerLS.done ? 'list-group-item-span doneNote-span' : 'list-group-item-span';
+
     // добавляю код переменной
-    const TaskHTML = `  <li class="list-group-item"> 
-                            <div class="list-group-item-span">
-                               <b> ${TaskIext}</b>
-                               <p> ${TaskIextInfoHtml} </p>
+    const TaskHTML = `  <li id="${taskObjekt.id}" class="list-group-item"> 
+                            <div class="${cssClassDone}">
+                               <b> ${taskObjekt.text}</b>
+                               <p> ${taskObjekt.textInfo} </p>
                             </div>
                             <div class="task-item__buttons">
                                 <button type="button" class="btn btn-outline-success" data-action="done">
@@ -45,12 +59,21 @@ function addTask (event) {
     TaskInput.value = ""; // очищаю пооле ввода 1
     TaskIextInfo.value = ""; // очищаю пооле ввода 2
     TaskInput.focus(); //фокус на поле 1
+
+    if (TaskStart.children.length > 1) {
+        TaskStart.classList.add ('none')
+    }
 }
 
 // Функция удаления задачи
 function deleteTask (event) {
     if (event.target.dataset.action === 'delete') {
         const perentNote = event.target.closest ('.list-group-item');
+        const noteId = Number(perentNote.id);
+        const indexDelite = taskMenedgerLS.findIndex(function (taskMenedgerLS) {
+            return taskMenedgerLS.id === noteId;
+        });
+        taskMenedgerLS.splice(indexDelite, 1);
         perentNote.remove();
     }
 }
@@ -59,6 +82,15 @@ function deleteTask (event) {
 function doneTask (event) {
     if (event.target.dataset.action === 'done') {
         const doneNote = event.target.closest ('.list-group-item');
+        
+        const noteId = Number(doneNote.id);
+       const indexDone = taskMenedgerLS.find (function (doneNodeIndex) {
+        if (doneNodeIndex.noteId === noteId) {
+            return true
+        }
+       })
+      //doneNote.done = !doneNote.done;
+       console.log(taskMenedgerLS);
         const spanNote = doneNote.querySelector ('.list-group-item-span');
         spanNote.classList.toggle('doneNote-span');
     }
