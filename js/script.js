@@ -76,6 +76,10 @@ function deleteTask (event) {
         taskMenedgerLS.splice(indexDelite, 1);
         perentNote.remove();
     }
+
+    if (TaskStart.children.length == 1) {
+        TaskStart.classList.remove ('none')
+    }
 }
 
 // Функция выполнения задачи
@@ -84,12 +88,13 @@ function doneTask (event) {
         const doneNote = event.target.closest ('.list-group-item');
         
         const noteId = Number(doneNote.id);
-       const indexDone = taskMenedgerLS.find (function (doneNodeIndex) {
-        if (doneNodeIndex.noteId === noteId) {
+        console.log (noteId);
+        const indexDone = taskMenedgerLS.find (function (taskMenedgerLS) {
+        if (taskMenedgerLS.noteId === noteId) {
             return true
         }
        })
-      //doneNote.done = !doneNote.done;
+      taskMenedgerLS.done = !taskMenedgerLS.done;
        console.log(taskMenedgerLS);
         const spanNote = doneNote.querySelector ('.list-group-item-span');
         spanNote.classList.toggle('doneNote-span');
