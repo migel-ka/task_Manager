@@ -12,6 +12,36 @@ const TaskStart = document.querySelector ('#task-start'); //элемент на�
 
 let taskMenedgerLS =[]; //создаю хранилище для задач
 
+if (localStorage.getItem('tasks')) {
+    taskMenedgerLS = JSON.parse(localStorage.getItem('tasks'));
+}
+
+taskMenedgerLS.forEach(function (task) {
+    const cssClassDone = task.done ? 'list-group-item-span doneNote-span' : 'list-group-item-span';
+
+    const TaskHTML = `  <li id="${task.id}" class="list-group-item"> 
+                            <div class="${cssClassDone}">
+                               <b> ${task.text}</b>
+                               <p> ${task.textInfo} </p>
+                            </div>
+                            <div class="task-item__buttons">
+                                <button type="button" class="btn btn-outline-success" data-action="done">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn btn-outline-danger" data-action="delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                        <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </li>`;
+
+    TaskHtmlList.insertAdjacentHTML ('beforeend', TaskHTML);  
+
+})
+
 Form.addEventListener('submit', addTask); //addTask
 
 TaskHtmlList.addEventListener('click', deleteTask); //deleteTask
@@ -63,6 +93,8 @@ function addTask (event) {
     if (TaskStart.children.length > 1) {
         TaskStart.classList.add ('none')
     }
+
+    saveToLS()
 }
 
 // Функция удаления задачи
@@ -77,9 +109,10 @@ function deleteTask (event) {
         perentNote.remove();
     }
 
-    if (TaskStart.children.length == 1) {
+     if (TaskStart.children.length == 2) {
         TaskStart.classList.remove ('none')
     }
+    saveToLS()
 }
 
 // Функция выполнения задачи
@@ -88,15 +121,24 @@ function doneTask (event) {
         const doneNote = event.target.closest ('.list-group-item');
         
         const noteId = Number(doneNote.id);
-        console.log (noteId);
-        const indexDone = taskMenedgerLS.find (function (taskMenedgerLS) {
-        if (taskMenedgerLS.noteId === noteId) {
+
+        const indexDone = taskMenedgerLS.find(function (task) {
+        if (task.id === noteId) {
             return true
         }
        })
-      taskMenedgerLS.done = !taskMenedgerLS.done;
-       console.log(taskMenedgerLS);
+      
+       console.log(indexDone);
+       indexDone.done = !indexDone.done;
+       console.log(indexDone);
         const spanNote = doneNote.querySelector ('.list-group-item-span');
         spanNote.classList.toggle('doneNote-span');
     }
+    
+    saveToLS()
+}
+
+// Сохраняе объект
+function saveToLS() {
+    localStorage.setItem('tasks', JSON.stringify(taskMenedgerLS))
 }
