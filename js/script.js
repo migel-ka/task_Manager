@@ -10,6 +10,8 @@ const TaskHtmlList = document.querySelector ('#taskManeger-task-info'); // на�
 
 const TaskStart = document.querySelector ('#task-start'); //элемент начала
 
+const DeleteAll = document.querySelector ('#deleteAll'); //очистка всего кнопка
+
 let taskMenedgerLS =[]; //создаю хранилище для задач
 
 if (localStorage.getItem('tasks')) {
@@ -93,9 +95,12 @@ function addTask (event) {
     if (TaskStart.children.length > 1) {
         TaskStart.classList.add ('none')
     }
-
     saveToLS()
 }
+
+DeleteAll.addEventListener('click', function () {
+    localStorage.clear();
+    location. reload()});
 
 // Функция удаления задачи
 function deleteTask (event) {
@@ -109,7 +114,7 @@ function deleteTask (event) {
         perentNote.remove();
     }
 
-     if (TaskStart.children.length == 2) {
+     if (TaskStart.children.length == 1) {
         TaskStart.classList.remove ('none')
     }
     saveToLS()
@@ -131,8 +136,8 @@ function doneTask (event) {
        console.log(indexDone);
        indexDone.done = !indexDone.done;
        console.log(indexDone);
-        const spanNote = doneNote.querySelector ('.list-group-item-span');
-        spanNote.classList.toggle('doneNote-span');
+       const spanNote = doneNote.querySelector ('.list-group-item-span');
+       spanNote.classList.toggle('doneNote-span');
     }
     
     saveToLS()
