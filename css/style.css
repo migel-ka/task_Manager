@@ -4,6 +4,10 @@
     box-sizing: border-box;
     font-family: "PT Sans Narrow", sans-serif;
 }
+.dark-item {
+    background-color: DarkGrey;
+    color: white;
+}
 
 .none {
     display: none !important;
